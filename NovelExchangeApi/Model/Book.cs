@@ -31,13 +31,13 @@ public class Book
     [Column("series")]
     public string? Series { get; set; }
 
-    // Foreign key for Author
     [Column("author_id")]
     public Guid AuthorId { get; set; }
     
-    [ForeignKey("AuthorId")]
     public Author Author { get; set; } = null!;
 
-    // Navigation property for Reviews
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+    public ICollection<User> Users { get; set; } = new List<User>();
+
 }

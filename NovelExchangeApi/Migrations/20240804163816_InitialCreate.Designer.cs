@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NovelExchangeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240803202035_InitialCreate")]
+    [Migration("20240804163816_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,36 @@ namespace NovelExchangeApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AuthorUser", b =>
+                {
+                    b.Property<Guid>("AuthorsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AuthorsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AuthorUser");
+                });
+
+            modelBuilder.Entity("BookUser", b =>
+                {
+                    b.Property<Guid>("BooksId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("BooksId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("BookUser");
+                });
 
             modelBuilder.Entity("NovelExchangeApi.Model.Author", b =>
                 {
@@ -90,9 +120,6 @@ namespace NovelExchangeApi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("title");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Volume")
                         .HasColumnType("text")
                         .HasColumnName("volume");
@@ -100,8 +127,6 @@ namespace NovelExchangeApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("book");
                 });
@@ -182,6 +207,36 @@ namespace NovelExchangeApi.Migrations
                     b.ToTable("user");
                 });
 
+            modelBuilder.Entity("AuthorUser", b =>
+                {
+                    b.HasOne("NovelExchangeApi.Model.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovelExchangeApi.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BookUser", b =>
+                {
+                    b.HasOne("NovelExchangeApi.Model.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovelExchangeApi.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NovelExchangeApi.Model.Book", b =>
                 {
                     b.HasOne("NovelExchangeApi.Model.Author", "Author")
@@ -189,10 +244,6 @@ namespace NovelExchangeApi.Migrations
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("NovelExchangeApi.Model.User", null)
-                        .WithMany("Books")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("Author");
                 });
@@ -228,8 +279,6 @@ namespace NovelExchangeApi.Migrations
 
             modelBuilder.Entity("NovelExchangeApi.Model.User", b =>
                 {
-                    b.Navigation("Books");
-
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

@@ -55,8 +55,7 @@ namespace NovelExchangeApi.Migrations
                     description = table.Column<string>(type: "text", nullable: true),
                     genre = table.Column<string>(type: "text", nullable: true),
                     series = table.Column<string>(type: "text", nullable: true),
-                    author_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
+                    author_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,11 +66,54 @@ namespace NovelExchangeApi.Migrations
                         principalTable: "author",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorUser",
+                columns: table => new
+                {
+                    AuthorsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UsersId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorUser", x => new { x.AuthorsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_book_user_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AuthorUser_author_AuthorsId",
+                        column: x => x.AuthorsId,
+                        principalTable: "author",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuthorUser_user_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "user",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookUser",
+                columns: table => new
+                {
+                    BooksId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UsersId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookUser", x => new { x.BooksId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_BookUser_book_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "book",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookUser_user_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,14 +145,19 @@ namespace NovelExchangeApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuthorUser_UsersId",
+                table: "AuthorUser",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_book_author_id",
                 table: "book",
                 column: "author_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_book_UserId",
-                table: "book",
-                column: "UserId");
+                name: "IX_BookUser_UsersId",
+                table: "BookUser",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_review_book_id",
@@ -127,16 +174,22 @@ namespace NovelExchangeApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AuthorUser");
+
+            migrationBuilder.DropTable(
+                name: "BookUser");
+
+            migrationBuilder.DropTable(
                 name: "review");
 
             migrationBuilder.DropTable(
                 name: "book");
 
             migrationBuilder.DropTable(
-                name: "author");
+                name: "user");
 
             migrationBuilder.DropTable(
-                name: "user");
+                name: "author");
         }
     }
 }

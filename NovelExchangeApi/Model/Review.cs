@@ -18,17 +18,14 @@ public class Review
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; }
-    // Foreign key for User
+
     [Column("user_id")]
     public Guid UserId { get; set; }
-    
-    [ForeignKey("UserId")]
+
     public User User { get; set; } = null!;
-    
-    // Foreign key for Book
+
     [Column("book_id")]
     public Guid BookId { get; set; }
     
-    [ForeignKey("BookId")]
     public Book Book { get; set; } = null!;
 }

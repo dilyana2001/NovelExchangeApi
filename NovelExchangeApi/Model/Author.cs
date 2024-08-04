@@ -24,4 +24,6 @@ public class Author
     public DateTime? CreatedAt { get; set; }
 
     public ICollection<Book> Books { get; set; } = new List<Book>();
+
+    public ICollection<User> Users { get; set; } = new List<User>();
 }

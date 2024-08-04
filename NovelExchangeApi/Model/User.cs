@@ -31,7 +31,8 @@ public class User
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; }
 
-    // Navigation properties
     public ICollection<Book> Books { get; set; } = new List<Book>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Author> Authors { get; set; } = new List<Author>();
+
 }
