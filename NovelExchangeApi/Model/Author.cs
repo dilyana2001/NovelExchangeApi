@@ -23,7 +23,6 @@ public class Author
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; }
 
-    public ICollection<Book> Books { get; set; } = new List<Book>();
-
-    public ICollection<User> Users { get; set; } = new List<User>();
+    public ICollection<User> Users { get; set; } = [];
+    public ICollection<Book> Books { get; set; } = [];
 }

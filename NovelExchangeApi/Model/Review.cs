@@ -20,12 +20,8 @@ public class Review
     public DateTime? CreatedAt { get; set; }
 
     [Column("user_id")]
-    public Guid UserId { get; set; }
-
-    public User User { get; set; } = null!;
+    public Guid? UserId { get; set; }
 
     [Column("book_id")]
     public Guid BookId { get; set; }
-    
-    public Book Book { get; set; } = null!;
 }

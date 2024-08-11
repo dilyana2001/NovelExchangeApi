@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NovelExchangeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240804163816_InitialCreate")]
+    [Migration("20240811160336_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,32 +27,32 @@ namespace NovelExchangeApi.Migrations
 
             modelBuilder.Entity("AuthorUser", b =>
                 {
-                    b.Property<Guid>("AuthorsId")
+                    b.Property<Guid>("author_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("AuthorsId", "UsersId");
+                    b.HasKey("author_id", "user_id");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("user_id");
 
-                    b.ToTable("AuthorUser");
+                    b.ToTable("author_user", (string)null);
                 });
 
             modelBuilder.Entity("BookUser", b =>
                 {
-                    b.Property<Guid>("BooksId")
+                    b.Property<Guid>("book_id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<Guid>("user_id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("BooksId", "UsersId");
+                    b.HasKey("book_id", "user_id");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("user_id");
 
-                    b.ToTable("BookUser");
+                    b.ToTable("book_user", (string)null);
                 });
 
             modelBuilder.Entity("NovelExchangeApi.Model.Author", b =>
@@ -155,7 +155,7 @@ namespace NovelExchangeApi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("title");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
@@ -211,13 +211,13 @@ namespace NovelExchangeApi.Migrations
                 {
                     b.HasOne("NovelExchangeApi.Model.Author", null)
                         .WithMany()
-                        .HasForeignKey("AuthorsId")
+                        .HasForeignKey("author_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NovelExchangeApi.Model.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -226,45 +226,37 @@ namespace NovelExchangeApi.Migrations
                 {
                     b.HasOne("NovelExchangeApi.Model.Book", null)
                         .WithMany()
-                        .HasForeignKey("BooksId")
+                        .HasForeignKey("book_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NovelExchangeApi.Model.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("NovelExchangeApi.Model.Book", b =>
                 {
-                    b.HasOne("NovelExchangeApi.Model.Author", "Author")
+                    b.HasOne("NovelExchangeApi.Model.Author", null)
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("NovelExchangeApi.Model.Review", b =>
                 {
-                    b.HasOne("NovelExchangeApi.Model.Book", "Book")
+                    b.HasOne("NovelExchangeApi.Model.Book", null)
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NovelExchangeApi.Model.User", "User")
+                    b.HasOne("NovelExchangeApi.Model.User", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("NovelExchangeApi.Model.Author", b =>

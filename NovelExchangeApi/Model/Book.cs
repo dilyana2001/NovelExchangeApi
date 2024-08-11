@@ -33,11 +33,8 @@ public class Book
 
     [Column("author_id")]
     public Guid AuthorId { get; set; }
-    
-    public Author Author { get; set; } = null!;
 
-    public ICollection<Review> Reviews { get; set; } = new List<Review>();
-
-    public ICollection<User> Users { get; set; } = new List<User>();
+    public ICollection<User> Users { get; set; } = [];
+    public ICollection<Review> Reviews { get; set; } = [];
 
 }

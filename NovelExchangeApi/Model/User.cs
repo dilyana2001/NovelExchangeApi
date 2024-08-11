@@ -26,13 +26,13 @@ public class User
     
     [Required]
     [Column("role")]
-    public string[]? Role { get; set; } = Array.Empty<string>();
+    public string[]? Role { get; set; } = [];
     
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; }
 
-    public ICollection<Book> Books { get; set; } = new List<Book>();
-    public ICollection<Review> Reviews { get; set; } = new List<Review>();
-    public ICollection<Author> Authors { get; set; } = new List<Author>();
+    public ICollection<Book> Books { get; set; } = [];
+    public ICollection<Review> Reviews { get; set; } = [];
+    public ICollection<Author> Authors { get; set; } = [];
 
 }
